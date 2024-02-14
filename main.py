@@ -1,7 +1,10 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from typing import List
 import uvicorn
 from sentence_transformers import SentenceTransformer
+
+port = 8000
 
 model = SentenceTransformer("sentence-transformers/clip-ViT-B-32-multilingual-v1")
 
@@ -17,7 +20,7 @@ class Request(BaseModel):
 
 
 class Response(Request):
-    embedding: str
+    embedding: List[float]
 
 
 @app.get("/")
@@ -33,7 +36,8 @@ async def get_embedding(request: Request) -> Response:
 
 
 def main() -> None:
-    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
+    uvicorn.run("main:app", port=port, reload=True)
+
 
 if __name__ == "__main__":
     main()
