@@ -1,10 +1,9 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
+from os import getenv
 import uvicorn
 from sentence_transformers import SentenceTransformer
-
-port = 8000
 
 model = SentenceTransformer("sentence-transformers/clip-ViT-B-32-multilingual-v1")
 
@@ -36,8 +35,9 @@ async def get_embedding(request: Request) -> Response:
 
 
 def main() -> None:
-    uvicorn.run("main:app", port=port, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
 
 
 if __name__ == "__main__":
+    port = int(getenv("PORT", 8000))
     main()
